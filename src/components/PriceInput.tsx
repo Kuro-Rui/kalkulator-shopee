@@ -13,16 +13,22 @@ export function PriceInput({
     value,
     onChange,
     label,
-    placeholder = "Masukkan harga...",
+    placeholder,
     className,
 }: PriceInputProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = e.target.value.replace(/\D/g, "");
+        const inputValue = e.target.value;
+
+        // Izinkan minus di awal dan angka saja
+        const isNegative = inputValue.startsWith("-");
+        const rawValue = inputValue.replace(/[^\d]/g, "");
         const numValue = parseInt(rawValue, 10) || 0;
-        onChange(numValue);
+
+        onChange(isNegative ? -numValue : numValue);
     };
 
-    const displayValue = value > 0 ? value.toLocaleString("id-ID") : "";
+    const displayValue =
+        value !== 0 ? (value < 0 ? "-" : "") + Math.abs(value).toLocaleString("id-ID") : "";
 
     return (
         <div className={cn("space-y-3", className)}>
@@ -33,7 +39,7 @@ export function PriceInput({
                 </span>
                 <Input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="text"
                     value={displayValue}
                     onChange={handleChange}
                     placeholder={placeholder}

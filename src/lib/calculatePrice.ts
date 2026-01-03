@@ -68,7 +68,7 @@ export function calculateInitialPrice(input: CalculationInput): CalculationResul
     const breakdown: FeeBreakdown[] = [];
 
     // 1. Biaya Administrasi (berdasarkan tipe penjual dan kategori)
-    let adminFee = category.adminFee;
+    const adminFee = category.adminFee;
 
     // Untuk Mall, biaya admin sama dengan Non-Star/Star/Star+
     breakdown.push({
@@ -182,9 +182,13 @@ export function calculateInitialPrice(input: CalculationInput): CalculationResul
         return feeAmount;
     };
 
+    // Harga minimum yang diperbolehkan Shopee
+    const MIN_PRICE = 99;
+
     // Binary search untuk menemukan harga awal yang tepat
-    let low = desiredNetPrice;
-    let high = desiredNetPrice * 3; // Upper bound yang cukup besar
+    // Untuk net price kecil/negatif, harga awal tetap harus >= MIN_PRICE
+    let low = MIN_PRICE;
+    let high = Math.max(MIN_PRICE, desiredNetPrice * 3, 10000); // Upper bound yang cukup besar
     let bestInitialPrice = low;
     let bestNetPrice = 0;
 
@@ -217,10 +221,10 @@ export function calculateInitialPrice(input: CalculationInput): CalculationResul
 
     // Cari harga awal terkecil yang menghasilkan net price >= desiredNetPrice
     // Lalu sesuaikan agar net price = desiredNetPrice tepat jika memungkinkan
-    let finalInitialPrice = bestInitialPrice;
+    let finalInitialPrice = Math.max(bestInitialPrice, MIN_PRICE);
 
     // Coba turunkan harga untuk mendapatkan net price yang tepat
-    while (finalInitialPrice > desiredNetPrice) {
+    while (finalInitialPrice > MIN_PRICE) {
         let totalFee = 0;
         for (const fee of breakdown) {
             if (fee.isApplied) {

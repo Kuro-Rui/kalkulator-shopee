@@ -7,6 +7,7 @@ import { toast } from "sonner";
 interface ResultCardProps {
     result: CalculationResult | null;
     desiredNetPrice: number;
+    hasCategory: boolean;
 }
 
 interface FeeRowProps {
@@ -40,13 +41,24 @@ function FeeRow({ fee, formatFeeDescription }: FeeRowProps) {
     );
 }
 
-export function ResultCard({ result, desiredNetPrice }: ResultCardProps) {
+export function ResultCard({ result, desiredNetPrice, hasCategory }: ResultCardProps) {
     const copyToClipboard = () => {
         if (result) {
             navigator.clipboard.writeText(result.initialPrice.toString());
             toast.success("Harga berhasil disalin!");
         }
     };
+
+    if (!hasCategory) {
+        return (
+            <div className="rounded-2xl border-2 border-dashed border-border p-8 text-center">
+                <Calculator className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
+                <p className="text-muted-foreground font-medium">
+                    Pilih kategori produk terlebih dahulu untuk melanjutkan
+                </p>
+            </div>
+        );
+    }
 
     if (!result || desiredNetPrice <= 0) {
         return (

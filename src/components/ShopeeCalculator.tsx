@@ -10,7 +10,7 @@ import { Package, Truck, Percent, Video, Shield, Wallet } from "lucide-react";
 
 export function ShopeeCalculator() {
     const [sellerType, setSellerType] = useState<SellerType>("non_star");
-    const [category, setCategory] = useState<CategoryData | null>(categoryGroups[0].categories[0]);
+    const [category, setCategory] = useState<CategoryData | null>(null);
     const [isPreOrder30Days, setIsPreOrder30Days] = useState(false);
     const [isFreeShippingXtra, setIsFreeShippingXtra] = useState(false);
     const [isPromoXtra, setIsPromoXtra] = useState(false);
@@ -74,80 +74,88 @@ export function ShopeeCalculator() {
                         <CategorySelector value={category} onChange={setCategory} />
                     </div>
 
-                    <div className="border-t border-border pt-6 space-y-3">
-                        <label className="block text-sm font-semibold text-foreground">
-                            Program & Kondisi
-                        </label>
-                        <div className="space-y-3">
-                            <ProgramToggle
-                                icon={Package}
-                                title="Pre-Order > 30 Hari"
-                                description="Produk PO yang sudah diupload lebih dari 30 hari"
-                                badge="+3%"
-                                checked={isPreOrder30Days}
-                                onChange={setIsPreOrder30Days}
-                            />
-                            <ProgramToggle
-                                icon={Shield}
-                                title="Asuransi Pengiriman"
-                                description="Produk terdaftar dalam program asuransi pengiriman"
-                                badge="+0.5%"
-                                checked={isShippingInsurance}
-                                onChange={setIsShippingInsurance}
-                            />
-                            <ProgramToggle
-                                icon={Truck}
-                                title="Gratis Ongkir XTRA"
-                                description="Tergabung dalam program & sudah menyelesaikan min. 500 pesanan"
-                                badge={
-                                    category?.freeShippingFee
-                                        ? `+${category.freeShippingFee}%`
-                                        : undefined
-                                }
-                                checked={isFreeShippingXtra}
-                                onChange={setIsFreeShippingXtra}
-                                disabled={!category?.freeShippingFee}
-                            />
-                            <ProgramToggle
-                                icon={Percent}
-                                title="Promo XTRA"
-                                description="Tergabung dalam program Promo XTRA untuk subsidi voucher diskon"
-                                badge="+4.5% (maks. 60rb)"
-                                checked={isPromoXtra}
-                                onChange={setIsPromoXtra}
-                            />
-                            <ProgramToggle
-                                icon={Video}
-                                title="Shopee Live XTRA"
-                                description="Penjualan melalui sesi streaming Shopee Live"
-                                badge="+3% (maks. 20rb)"
-                                checked={isShopeLiveXtra}
-                                onChange={setIsShopeLiveXtra}
-                            />
-                            <ProgramToggle
-                                icon={Wallet}
-                                title="Hemat Biaya Kirim"
-                                description="Penjual tergabung dalam program Hemat Biaya Kirim"
-                                badge="+Rp350"
-                                checked={isHematBiayaKirim}
-                                onChange={setIsHematBiayaKirim}
+                    {category && (
+                        <div className="border-t border-border pt-6 space-y-3">
+                            <label className="block text-sm font-semibold text-foreground">
+                                Program & Kondisi
+                            </label>
+                            <div className="space-y-3">
+                                <ProgramToggle
+                                    icon={Package}
+                                    title="Pre-Order > 30 Hari"
+                                    description="Produk PO yang sudah diupload lebih dari 30 hari"
+                                    badge="+3%"
+                                    checked={isPreOrder30Days}
+                                    onChange={setIsPreOrder30Days}
+                                />
+                                <ProgramToggle
+                                    icon={Shield}
+                                    title="Asuransi Pengiriman"
+                                    description="Produk terdaftar dalam program asuransi pengiriman"
+                                    badge="+0.5%"
+                                    checked={isShippingInsurance}
+                                    onChange={setIsShippingInsurance}
+                                />
+                                <ProgramToggle
+                                    icon={Truck}
+                                    title="Gratis Ongkir XTRA"
+                                    description="Tergabung dalam program & sudah menyelesaikan min. 500 pesanan"
+                                    badge={
+                                        category?.freeShippingFee
+                                            ? `+${category.freeShippingFee}%`
+                                            : undefined
+                                    }
+                                    checked={isFreeShippingXtra}
+                                    onChange={setIsFreeShippingXtra}
+                                    disabled={!category?.freeShippingFee}
+                                />
+                                <ProgramToggle
+                                    icon={Percent}
+                                    title="Promo XTRA"
+                                    description="Tergabung dalam program Promo XTRA untuk subsidi voucher diskon"
+                                    badge="+4.5% (maks. 60rb)"
+                                    checked={isPromoXtra}
+                                    onChange={setIsPromoXtra}
+                                />
+                                <ProgramToggle
+                                    icon={Video}
+                                    title="Shopee Live XTRA"
+                                    description="Penjualan melalui sesi streaming Shopee Live"
+                                    badge="+3% (maks. 20rb)"
+                                    checked={isShopeLiveXtra}
+                                    onChange={setIsShopeLiveXtra}
+                                />
+                                <ProgramToggle
+                                    icon={Wallet}
+                                    title="Hemat Biaya Kirim"
+                                    description="Penjual tergabung dalam program Hemat Biaya Kirim"
+                                    badge="+Rp350"
+                                    checked={isHematBiayaKirim}
+                                    onChange={setIsHematBiayaKirim}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {category && (
+                        <div className="border-t border-border pt-6">
+                            <PriceInput
+                                value={desiredNetPrice}
+                                onChange={setDesiredNetPrice}
+                                label="Harga Bersih yang Diinginkan"
+                                placeholder="0"
                             />
                         </div>
-                    </div>
-
-                    <div className="border-t border-border pt-6">
-                        <PriceInput
-                            value={desiredNetPrice}
-                            onChange={setDesiredNetPrice}
-                            label="Harga Bersih yang Diinginkan"
-                            placeholder="Contoh: 100.000"
-                        />
-                    </div>
+                    )}
                 </section>
 
                 {/* Result Section */}
                 <section>
-                    <ResultCard result={result} desiredNetPrice={desiredNetPrice} />
+                    <ResultCard
+                        result={result}
+                        desiredNetPrice={desiredNetPrice}
+                        hasCategory={!!category}
+                    />
                 </section>
 
                 {/* Footer */}

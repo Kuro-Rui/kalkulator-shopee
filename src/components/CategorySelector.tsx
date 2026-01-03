@@ -27,7 +27,7 @@ export function CategorySelector({ value, onChange }: CategorySelectorProps) {
     };
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-2">
             <label className="block text-sm font-semibold text-foreground">Kategori Produk</label>
             <Select value={value?.name || ""} onValueChange={handleChange}>
                 <SelectTrigger className="w-full h-12 text-left bg-card border-2 border-border hover:border-primary/50 transition-colors input-glow">
@@ -48,9 +48,9 @@ export function CategorySelector({ value, onChange }: CategorySelectorProps) {
                                     value={category.name}
                                     className="py-2"
                                 >
-                                    <div className="flex items-center justify-between w-full">
+                                    <div className="flex items-center justify-between w-full gap-2">
                                         <span>{category.name}</span>
-                                        <span className="ml-3 text-xs font-medium text-primary bg-accent px-2 py-0.5 rounded-full">
+                                        <span className="text-xs font-medium text-primary bg-accent px-2 py-0.5 rounded-full">
                                             {category.adminFee}%
                                         </span>
                                     </div>
@@ -60,21 +60,6 @@ export function CategorySelector({ value, onChange }: CategorySelectorProps) {
                     ))}
                 </SelectContent>
             </Select>
-            {value && (
-                <p className="text-xs text-muted-foreground">
-                    Biaya admin:{" "}
-                    <span className="font-semibold text-primary">{value.adminFee}%</span>
-                    {value.freeShippingFee && (
-                        <>
-                            {" "}
-                            | Gratis Ongkir XTRA:{" "}
-                            <span className="font-semibold text-primary">
-                                {value.freeShippingFee}%
-                            </span>
-                        </>
-                    )}
-                </p>
-            )}
         </div>
     );
 }
