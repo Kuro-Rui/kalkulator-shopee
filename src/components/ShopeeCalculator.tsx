@@ -68,6 +68,33 @@ export function ShopeeCalculator() {
         isHematBiayaKirim,
     ]);
 
+    // Hitung maksimal penghasilan yang mungkin (saat harga awal = 150.000.000)
+    const maxPossibleNetPrice = useMemo(() => {
+        if (!category) return undefined;
+        const maxResult = calculateNetPrice({
+            sellerType,
+            category,
+            isPreOrder30Days,
+            isFreeShippingXtra,
+            isPromoXtra,
+            isShopeLiveXtra,
+            isShippingInsurance,
+            isHematBiayaKirim,
+            desiredNetPrice: 0,
+            initialPrice: 150000000,
+        });
+        return maxResult.netPrice;
+    }, [
+        sellerType,
+        category,
+        isPreOrder30Days,
+        isFreeShippingXtra,
+        isPromoXtra,
+        isShopeLiveXtra,
+        isShippingInsurance,
+        isHematBiayaKirim,
+    ]);
+
     const result = useMemo(() => {
         // Abaikan marker untuk minus saja atau null
         const priceValue = inputPrice === -0.001 || inputPrice === null ? null : inputPrice;
@@ -303,6 +330,7 @@ export function ShopeeCalculator() {
                             hasCategory={!!category}
                             isReverseCalculation={isReverseCalculation}
                             minPossibleNetPrice={minPossibleNetPrice}
+                            maxPossibleNetPrice={maxPossibleNetPrice}
                             hideCopy={false}
                         />
                     ) : (

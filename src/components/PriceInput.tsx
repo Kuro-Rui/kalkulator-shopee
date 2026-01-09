@@ -44,7 +44,8 @@ export function PriceInput({
             return;
         }
 
-        const numValue = parseInt(rawValue, 10);
+        // Batasi maksimal 9 digit
+        const numValue = parseInt(rawValue.slice(0, 9), 10);
         onChange(isNegative ? -numValue : numValue);
     };
 

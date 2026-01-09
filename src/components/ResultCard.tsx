@@ -10,6 +10,7 @@ interface ResultCardProps {
     hasCategory: boolean;
     isReverseCalculation?: boolean;
     minPossibleNetPrice?: number;
+    maxPossibleNetPrice?: number;
     hideCopy?: boolean;
 }
 
@@ -50,6 +51,7 @@ export function ResultCard({
     hasCategory,
     isReverseCalculation = true,
     minPossibleNetPrice,
+    maxPossibleNetPrice,
     hideCopy = true,
 }: ResultCardProps) {
     const copyToClipboard = () => {
@@ -99,8 +101,28 @@ export function ResultCard({
                     Harga bersih tidak dapat dicapai
                 </p>
                 <p className="text-sm text-muted-foreground">
-                    Minimal total penghasilan {formatRupiah(minPossibleNetPrice!)} untuk konfigurasi
-                    potongan ini
+                    Minimal total penghasilan {formatRupiah(minPossibleNetPrice!)}
+                </p>
+            </div>
+        );
+    }
+
+    // Untuk mode Hitung Harga Awal, cek apakah input melebihi batas maksimum
+    const isAboveMaximum =
+        isReverseCalculation &&
+        maxPossibleNetPrice !== undefined &&
+        desiredNetPrice > maxPossibleNetPrice;
+
+    // Tampilkan error jika harga bersih yang diinginkan melebihi maksimum
+    if (isAboveMaximum) {
+        return (
+            <div className="rounded-2xl border-2 border-destructive/50 bg-destructive/5 p-6 text-center">
+                <AlertCircle className="w-12 h-12 mx-auto text-destructive mb-3" />
+                <p className="text-destructive font-semibold mb-1">
+                    Harga bersih melebihi batas maksimum
+                </p>
+                <p className="text-sm text-muted-foreground">
+                    Maksimal total penghasilan adalah {formatRupiah(maxPossibleNetPrice!)}
                 </p>
             </div>
         );
